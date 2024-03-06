@@ -87,7 +87,6 @@ public class TaskManager {
 
         // удаляем подзадачу из мапы.
         subTasks.remove(subtask.getId());
-
         // Полностью пересчитываем статус эпика
         updateEpicStatus(subtask);
     }
