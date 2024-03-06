@@ -88,11 +88,8 @@ public class TaskManager {
         // удаляем подзадачу из мапы.
         subTasks.remove(subtask.getId());
 
-        // Если после этого список эпика пуст,
-        // полностью пересчитываем статус эпика
-        if (epic.getSubtasksIdInEpic().isEmpty()) {
-            updateEpicStatus(subtask);
-        }
+        // Полностью пересчитываем статус эпика
+        updateEpicStatus(subtask);
     }
 
     public Subtask getSubtaskById(int id) {
