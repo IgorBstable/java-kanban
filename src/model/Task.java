@@ -6,14 +6,13 @@ public class Task {
     private String name;
     private String description;
     private TaskStatus status;
-    private final int id;
+    private int id = 0;
 
 
-    public Task(String name, String description, TaskStatus status, int id) {
+    public Task(String name, String description, TaskStatus status) {
         this.name = name;
         this.description = description;
         this.status = status;
-        this.id = id;
     }
 
     public String getName() {
@@ -42,6 +41,10 @@ public class Task {
 
     public int getId() {
         return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     @Override
