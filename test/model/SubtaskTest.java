@@ -1,14 +1,8 @@
 package model;
 
-import java.util.ArrayList;
-
 import static org.junit.jupiter.api.Assertions.*;
-
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-
 import static model.TaskStatus.*;
-
 import service.*;
 
 class SubtaskTest {
@@ -18,7 +12,7 @@ class SubtaskTest {
     void subtaskEqualsIfIdEquals() {
         Epic epic = new Epic("Test addNewSubtask",
                 "Test addNewSubtask description");
-        TaskManager taskManager = new Managers();
+        TaskManager taskManager = Managers.getDefault();
         taskManager.makeNewEpic(epic);
         Subtask subTask = new Subtask("Test addNewTask",
                 "Test addNewTask description", NEW, epic.getId());
@@ -36,7 +30,7 @@ class SubtaskTest {
     // при этом id эпика ДОЛЖНО БЫТЬ РАВНЫМ id подзадачи
     @Test
     void shouldNotMakeSubtaskAsItselfEpic() {
-        TaskManager taskManager = new Managers();
+        TaskManager taskManager = Managers.getDefault();
         Epic epic = new Epic("Test shouldNotMakeSubtaskAsEpic",
                 "Test shouldNotMakeSubtaskAsEpic description");
         taskManager.makeNewEpic(epic);

@@ -14,7 +14,7 @@ class TaskTest {
     void taskEqualsIfIdEquals() {
         Task task = new Task("Test taskEqualsIfIdEquals",
                 "Test taskEqualsIfIdEquals description", NEW);
-        TaskManager taskManager = new Managers();
+        TaskManager taskManager = Managers.getDefault();
         taskManager.makeNewTask(task);
         int taskId = task.getId();
 
@@ -26,7 +26,7 @@ class TaskTest {
     // не конфликтуют внутри менеджера.
     @Test
     void ShouldNotConflictWhenSetIdAndGenerateId() {
-        TaskManager taskManager = new Managers();
+        TaskManager taskManager = Managers.getDefault();
         Task task = new Task("Test ShouldNotConflictWhenSetIdAndGenerateId",
                 "task", NEW);
         taskManager.makeNewTask(task);
@@ -48,7 +48,7 @@ class TaskTest {
     void addNewTask() {
         Task task = new Task("Test addNewTask",
                 "Test addNewTask description", NEW);
-        TaskManager taskManager = new Managers();
+        TaskManager taskManager = Managers.getDefault();
         taskManager.makeNewTask(task);
         int taskId = task.getId();
 
@@ -61,6 +61,6 @@ class TaskTest {
 
         assertNotNull(tasks, "Задачи не возвращаются.");
         assertEquals(1, tasks.size(), "Неверное количество задач.");
-        assertEquals(task, tasks.get(0), "Задачи не совпадают.");
+        assertEquals(task, tasks.getFirst(), "Задачи не совпадают.");
     }
 }

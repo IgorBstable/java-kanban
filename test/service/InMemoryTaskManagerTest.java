@@ -14,7 +14,7 @@ class InMemoryTaskManagerTest {
     // добавляет задачи разного типа и может найти их по id;
     @Test
     void addTasks() {
-        InMemoryTaskManager inMemoryTaskManager = new InMemoryTaskManager();
+        TaskManager inMemoryTaskManager = Managers.getDefault();
         Task task = new Task("Test addTasks",
                 "Test addTasks description", NEW);
         inMemoryTaskManager.makeNewTask(task);

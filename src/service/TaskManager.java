@@ -1,13 +1,11 @@
 package service;
 
-import model.Epic;
-import model.Subtask;
 import model.Task;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 public interface TaskManager {
-    int makeId();
 
     void makeNewTask(Task task);
 
@@ -21,31 +19,29 @@ public interface TaskManager {
 
     void deleteTaskById(int id);
 
-    void makeNewSubtask(Subtask subtask);
+    void makeNewSubtask(Task subtask);
 
-    ArrayList<Subtask> getAllSubtasks();
+    ArrayList<Task> getAllSubtasks();
 
     void delSubtasks();
 
     void delSubtaskById(int id);
 
-    Subtask getSubtaskById(int id);
+    Task getSubtaskById(int id);
 
-    void updateSubTask(Subtask subtask);
+    void updateSubTask(Task subtask);
 
-    void makeNewEpic(Epic epic);
+    void makeNewEpic(Task epic);
 
-    ArrayList<Epic> getAllEpics();
+    ArrayList<Task> getAllEpics();
 
     void deleteEpics();
 
-    Epic getEpicById(Integer id);
+    Task getEpicById(Integer id);
 
     void delEpicById(int id);
 
-    ArrayList<Subtask> getListOfSubTasksOfEpic(int id);
+    ArrayList<Task> getListOfSubTasksOfEpic(int id);
 
-    void updateEpicStatus(Subtask subtask);
-
-    HistoryManager getHistoryManager();
+    LinkedList<Task> getHistoryManager();
 }

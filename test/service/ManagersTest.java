@@ -16,8 +16,10 @@ class ManagersTest {
     @Test
     void newManager() {
         TaskManager manager = Managers.getDefault();
-
-        assertEquals(1, manager.makeId());
+        Task task = new Task("Test newManager",
+                "Test newManager description", NEW);
+        manager.makeNewTask(task);
+        assertEquals("Test newManager", task.getName());
     }
 
     // проверяем неизменность задачи (по всем полям) при добавлении задачи в менеджер
