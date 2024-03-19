@@ -2,14 +2,15 @@ package service;
 
 import model.*;
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.HashMap;
 import java.util.LinkedList;
 
 public class InMemoryTaskManager implements TaskManager {
     private int taskId = 0;
-    private final HashMap<Integer, Task> tasks = new HashMap<>();
-    private final HashMap<Integer, Task> subTasks = new HashMap<>();
-    private final HashMap<Integer, Task> epics = new HashMap<>();
+    private final Map<Integer, Task> tasks = new HashMap<>();
+    private final Map<Integer, Task> subTasks = new HashMap<>();
+    private final Map<Integer, Task> epics = new HashMap<>();
     private final HistoryManager historyManager = Managers.getDefaultHistory();
 
 

@@ -1,11 +1,12 @@
 package service;
 
 import model.Task;
+import java.util.List;
 import java.util.LinkedList;
 
 public class InMemoryHistoryManager implements HistoryManager {
 
-    private final LinkedList<Task> history = new LinkedList<>();
+    private final List<Task> history = new LinkedList<>();
     private static final int HISTORY_SIZE = 10;
 
     public LinkedList<Task> getHistory() {
