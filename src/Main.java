@@ -17,12 +17,36 @@ public class Main {
         Subtask subTask2 = new Subtask("Подзадача2", "Описание подзадачи2",
                 TaskStatus.NEW, epic1.getId());
         manager.makeNewSubtask(subTask2);
+        Subtask subTask3 = new Subtask("Подзадача3", "Описание подзадачи3",
+                TaskStatus.NEW, epic1.getId());
+        manager.makeNewSubtask(subTask3);
         Epic epic2 = new Epic("Эпик2", "Описание эпика2");
         manager.makeNewEpic(epic2);
-        Subtask subTask3 = new Subtask("Подзадача3", "Описание подзадачи3",
-                TaskStatus.NEW, epic2.getId());
-        manager.makeNewSubtask(subTask3);
 
+        // Проверка удаления из истории просмотров (в том числе при удалении задач)
+        // Сначала добавляем в историю задачи по несколько раз каждую
+        manager.getTaskById(2);
+        manager.getTaskById(1);
+        manager.getTaskById(1);
+        manager.getTaskById(2);
+        manager.getEpicById(3);
+        manager.getEpicById(3);
+        manager.getSubtaskById(5);
+        manager.getSubtaskById(4);
+        manager.getSubtaskById(6);
+        manager.getSubtaskById(5);
+        manager.getSubtaskById(6);
+        manager.getSubtaskById(4);
+        manager.getEpicById(7);
+        manager.getEpicById(7);
+        printAllTasks(manager);
+
+        // Теперь удаляем одну из задач
+        manager.deleteTaskById(2);
+        printAllTasks(manager);
+
+        // Удаляем эпик с тремя задачами
+        manager.delEpicById(3);
         printAllTasks(manager);
     }
 
