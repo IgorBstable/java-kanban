@@ -33,6 +33,9 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void deleteTasks() {
+        for (Integer id : tasks.keySet()) {
+            historyManager.remove(id);
+        }
         tasks.clear();
     }
 
@@ -86,6 +89,10 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void delSubtasks() {
+        for (Integer id : subTasks.keySet()) {
+            historyManager.remove(id);
+        }
+
         subTasks.clear();
         // Поскольку этот метод удаляет все подзадачи, то необходимо:
         // 1. очистить списки id подзадач у всех эпиков
@@ -149,6 +156,14 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void deleteEpics() {
+        for (Integer id : epics.keySet()) {
+            historyManager.remove(id);
+        }
+
+        for (Integer id : subTasks.keySet()) {
+            historyManager.remove(id);
+        }
+
         epics.clear();
         subTasks.clear();
     }
