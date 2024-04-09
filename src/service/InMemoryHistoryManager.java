@@ -10,19 +10,6 @@ public class InMemoryHistoryManager implements HistoryManager {
     private Node first;
     private Node last;
 
-    private static class Node {
-
-        public Node prev;
-        public Task data;
-        public Node next;
-
-        public Node(Node prev, Task data, Node next) {
-            this.prev = prev;
-            this.data = data;
-            this.next = next;
-        }
-    }
-
     public Node linkLast(Task task) {
         final Node l = last;
         final Node newNode = new Node(l, task, null);
@@ -43,25 +30,21 @@ public class InMemoryHistoryManager implements HistoryManager {
         final Node next = node.next;
         final Node prev = node.prev;
 
-        for (Node x = first; x != null; x = x.next) {
-            if (node.equals(x)) {
-                if (prev == null) {
-                    first = next;
-                } else {
-                    prev.next = next;
-                    x.prev = null;
-                }
-
-                if (next == null) {
-                    last = prev;
-                } else {
-                    next.prev = prev;
-                    x.next = null;
-                }
-
-                x.data = null;
-            }
+        if (prev == null) {
+            first = next;
+        } else {
+            prev.next = next;
+            node.prev = null;
         }
+
+        if (next == null) {
+            last = prev;
+        } else {
+            next.prev = prev;
+            node.next = null;
+        }
+
+        node.data = null;
     }
 
     @Override
@@ -92,5 +75,17 @@ public class InMemoryHistoryManager implements HistoryManager {
         }
         return taskArrayList;
     }
-}
 
+    private static class Node {
+
+        public Node prev;
+        public Task data;
+        public Node next;
+
+        public Node(Node prev, Task data, Node next) {
+            this.prev = prev;
+            this.data = data;
+            this.next = next;
+        }
+    }
+}
