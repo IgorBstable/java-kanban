@@ -12,8 +12,8 @@ class TaskTest {
     // проверим, что экземпляры класса Task равны друг другу, если равен их id
     @Test
     void taskEqualsIfIdEquals() {
-        Task task = new Task("Test taskEqualsIfIdEquals",
-                "Test taskEqualsIfIdEquals description", NEW);
+        Task task = new Task(0, "Test taskEqualsIfIdEquals",
+                "Test taskEqualsIfIdEquals description", NEW, TaskTypes.TASK);
         TaskManager taskManager = Managers.getDefault();
         taskManager.makeNewTask(task);
         int taskId = task.getId();
@@ -27,12 +27,12 @@ class TaskTest {
     @Test
     void ShouldNotConflictWhenSetIdAndGenerateId() {
         TaskManager taskManager = Managers.getDefault();
-        Task task = new Task("Test ShouldNotConflictWhenSetIdAndGenerateId",
-                "task", NEW);
+        Task task = new Task(0, "Test ShouldNotConflictWhenSetIdAndGenerateId",
+                "task", NEW, TaskTypes.TASK);
         taskManager.makeNewTask(task);
         int id = task.getId();
-        Task task1 = new Task("Test ShouldNotConflictWhenSetIdAndGenerateId",
-                "task1", NEW);
+        Task task1 = new Task(0, "Test ShouldNotConflictWhenSetIdAndGenerateId",
+                "task1", NEW, TaskTypes.TASK);
         task1.setId(id);
         taskManager.makeNewTask(task1);
 
@@ -46,8 +46,8 @@ class TaskTest {
     // Пример теста из ТЗ
     @Test
     void addNewTask() {
-        Task task = new Task("Test addNewTask",
-                "Test addNewTask description", NEW);
+        Task task = new Task(0, "Test addNewTask",
+                "Test addNewTask description", NEW, TaskTypes.TASK);
         TaskManager taskManager = Managers.getDefault();
         taskManager.makeNewTask(task);
         int taskId = task.getId();

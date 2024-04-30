@@ -1,6 +1,7 @@
 package service;
 
 import model.Task;
+import model.TaskTypes;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -18,8 +19,8 @@ class ManagersTest {
     @Test
     void newManager() {
         TaskManager manager = Managers.getDefault();
-        Task task = new Task("Test newManager",
-                "Test newManager description", NEW);
+        Task task = new Task(0, "Test newManager",
+                "Test newManager description", NEW, TaskTypes.TASK);
         manager.makeNewTask(task);
         assertEquals(List.of(task), manager.getAllTasks());
     }
@@ -28,8 +29,8 @@ class ManagersTest {
     @Test
     void taskEqualsAfterAdd() {
         TaskManager manager = Managers.getDefault();
-        Task task = new Task("Test taskEqualsAfterAdd",
-                "Test taskEqualsAfterAdd description", NEW);
+        Task task = new Task(0, "Test taskEqualsAfterAdd",
+                "Test taskEqualsAfterAdd description", NEW, TaskTypes.TASK);
         manager.makeNewTask(task);
 
         assertEquals("Test taskEqualsAfterAdd", task.getName());

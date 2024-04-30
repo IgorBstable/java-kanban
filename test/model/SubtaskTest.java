@@ -10,12 +10,13 @@ class SubtaskTest {
     // проверяем, что экземпляры класса Subtask равны друг другу, если равен их id
     @Test
     void subtaskEqualsIfIdEquals() {
-        Epic epic = new Epic("Test addNewSubtask",
-                "Test addNewSubtask description");
+        Epic epic = new Epic(0, "Test addNewSubtask",
+                "Test addNewSubtask description", NEW, TaskTypes.EPIC);
         TaskManager taskManager = Managers.getDefault();
         taskManager.makeNewEpic(epic);
-        Subtask subTask = new Subtask("Test addNewTask",
-                "Test addNewTask description", NEW, epic.getId());
+        Subtask subTask = new Subtask(0, "Test addNewTask",
+                "Test addNewTask description", NEW,
+                TaskTypes.SUBTASK, epic.getId());
         taskManager.makeNewSubtask(subTask);
 
         int subTaskId = subTask.getId();
@@ -31,14 +32,17 @@ class SubtaskTest {
     @Test
     void shouldNotMakeSubtaskAsItselfEpic() {
         TaskManager taskManager = Managers.getDefault();
-        Epic epic = new Epic("Test shouldNotMakeSubtaskAsEpic",
-                "Test shouldNotMakeSubtaskAsEpic description");
+        Epic epic = new Epic(0, "Test shouldNotMakeSubtaskAsEpic",
+                "Test shouldNotMakeSubtaskAsEpic description",
+                NEW, TaskTypes.EPIC);
         taskManager.makeNewEpic(epic);
-        Subtask subTask = new Subtask("Test shouldNotMakeSubtaskAsEpic",
-                "Test shouldNotMakeSubtaskAsEpic description", NEW, epic.getId());
+        Subtask subTask = new Subtask(0, "Test shouldNotMakeSubtaskAsEpic",
+                "Test shouldNotMakeSubtaskAsEpic description", NEW,
+                TaskTypes.SUBTASK, epic.getId());
         taskManager.makeNewSubtask(subTask);
-        Epic epic1 = new Epic("Test shouldNotMakeSubtaskAsEpic",
-                "Test shouldNotMakeSubtaskAsEpic description");
+        Epic epic1 = new Epic(0, "Test shouldNotMakeSubtaskAsEpic",
+                "Test shouldNotMakeSubtaskAsEpic description",
+                NEW, TaskTypes.EPIC);
         taskManager.makeNewEpic(epic1);
 
         assertNotEquals(subTask.getId(), epic1.getId());
