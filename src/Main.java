@@ -79,7 +79,7 @@ public class Main {
 //    }
 
         FileBackedTaskManager manager = FileBackedTaskManager.loadFromFile
-                (new File("fileBacked"));
+                (new File("C:\\Java_course\\homework\\Sprint_4_and_further\\java-kanban\\fileBacked"));
         Task task1 = new Task(0,"Задача1", "Описание задачи1",
                 TaskStatus.NEW, TaskTypes.TASK);
         manager.makeNewTask(task1);
