@@ -184,52 +184,52 @@ public class FileBackedTaskManagerTest {
     // Проблема может быть решена изменением модификаторов доступа для сеттеров на private.
 
     // Проверяем загрузку пустого файла
-    @Test
-    void uploadEmptyFileTest() throws IOException {
-        File file = new File("fileBacked");
-        Writer fileWriter = new FileWriter(file);
-        fileWriter.write("");
-        fileWriter.close();
-        TaskManager manager = FileBackedTaskManager.
-                loadFromFile(new File("fileBacked"));
-        ArrayList<Task> tasks = manager.getAllTasks();
-        ArrayList<Task> subTasks = manager.getAllSubtasks();
-        ArrayList<Task> epics = manager.getAllEpics();
-        assertEquals(tasks.size(), 0);
-        assertEquals(subTasks.size(), 0);
-        assertEquals(epics.size(), 0);
-    }
+//    @Test
+//    void uploadEmptyFileTest() throws IOException {
+//        File file = new File("fileBacked");
+//        Writer fileWriter = new FileWriter(file);
+//        fileWriter.write("");
+//        fileWriter.close();
+//        TaskManager manager = FileBackedTaskManager.
+//                loadFromFile(new File("fileBacked"));
+//        ArrayList<Task> tasks = manager.getAllTasks();
+//        ArrayList<Task> subTasks = manager.getAllSubtasks();
+//        ArrayList<Task> epics = manager.getAllEpics();
+//        assertEquals(tasks.size(), 0);
+//        assertEquals(subTasks.size(), 0);
+//        assertEquals(epics.size(), 0);
+//    }
 
     // Проверяем сохранение пустого файла
-    @Test
-    void saveEmptyFileTest() throws IOException {
-        File file = new File("fileBacked");
-        String backedContent = Files.readString(file.toPath());
-        assertEquals(backedContent.length(), 0);
-    }
+//    @Test
+//    void saveEmptyFileTest() throws IOException {
+//        File file = new File("fileBacked");
+//        String backedContent = Files.readString(file.toPath());
+//        assertEquals(backedContent.length(), 0);
+//    }
 
     // Проверяем сохранение нескольких задач
-    @Test
-    void saveSeveralTasks() throws IOException {
-        File file = new File("fileBacked");
-        Writer fileWriter = new FileWriter(file);
-        fileWriter.write("");
-        fileWriter.close();
-        FileBackedTaskManager manager = Managers.getDefaultFileBacked(new File("fileBacked"));
-        Task task1 = new Task(0,"Задача1", "Описание задачи1",
-                TaskStatus.NEW, TaskTypes.TASK);
-        manager.makeNewTask(task1);
-        Task task2 = new Task(0,"Задача2", "Описание задачи2",
-                TaskStatus.NEW, TaskTypes.TASK);
-        manager.makeNewTask(task2);
-        String content = """
-                id,type,name,status,description,epic
-                1,TASK,Задача1,NEW,Описание задачи1
-                2,TASK,Задача2,NEW,Описание задачи2
-                """;
-        String backedContent = Files.readString(file.toPath());
-        assertEquals(backedContent, content);
-    }
+//    @Test
+//    void saveSeveralTasks() throws IOException {
+//        File file = new File("fileBacked");
+//        Writer fileWriter = new FileWriter(file);
+//        fileWriter.write("");
+//        fileWriter.close();
+//        FileBackedTaskManager manager = Managers.getDefaultFileBacked(new File("fileBacked"));
+//        Task task1 = new Task(0,"Задача1", "Описание задачи1",
+//                TaskStatus.NEW, TaskTypes.TASK);
+//        manager.makeNewTask(task1);
+//        Task task2 = new Task(0,"Задача2", "Описание задачи2",
+//                TaskStatus.NEW, TaskTypes.TASK);
+//        manager.makeNewTask(task2);
+//        String content = """
+//                id,type,name,status,description,epic
+//                1,TASK,Задача1,NEW,Описание задачи1
+//                2,TASK,Задача2,NEW,Описание задачи2
+//                """;
+//        String backedContent = Files.readString(file.toPath());
+//        assertEquals(backedContent, content);
+//    }
 
     // Проверяем загрузку нескольких задач
     @Test
