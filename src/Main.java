@@ -8,24 +8,24 @@ public class Main {
     public static void main(String[] args) throws IOException {
 
 //        TaskManager manager = Managers.getDefault();
-//        Task task1 = new Task("Задача1", "Описание задачи1",
+//        Task task1 = new Task(0, "Задача1", "Описание задачи1",
 //                TaskStatus.NEW, TaskTypes.TASK);
 //        manager.makeNewTask(task1);
-//        Task task2 = new Task("Задача2", "Описание задачи2",
+//        Task task2 = new Task(0, "Задача2", "Описание задачи2",
 //                TaskStatus.NEW, TaskTypes.TASK);
 //        manager.makeNewTask(task2);
-//        Epic epic1 = new Epic("Эпик1", "Описание эпика1", TaskTypes.EPIC);
+//        Epic epic1 = new Epic(0, "Эпик1", "Описание эпика1", TaskStatus.NEW, TaskTypes.EPIC);
 //        manager.makeNewEpic(epic1);
-//        Subtask subTask1 = new Subtask("Подзадача1", "Описание подзадачи1",
+//        Subtask subTask1 = new Subtask(0, "Подзадача1", "Описание подзадачи1",
 //                TaskStatus.NEW, TaskTypes.SUBTASK, epic1.getId());
 //        manager.makeNewSubtask(subTask1);
-//        Subtask subTask2 = new Subtask("Подзадача2", "Описание подзадачи2",
+//        Subtask subTask2 = new Subtask(0, "Подзадача2", "Описание подзадачи2",
 //                TaskStatus.NEW, TaskTypes.SUBTASK, epic1.getId());
 //        manager.makeNewSubtask(subTask2);
-//        Subtask subTask3 = new Subtask("Подзадача3", "Описание подзадачи3",
+//        Subtask subTask3 = new Subtask(0, "Подзадача3", "Описание подзадачи3",
 //                TaskStatus.NEW, TaskTypes.SUBTASK, epic1.getId());
 //        manager.makeNewSubtask(subTask3);
-//        Epic epic2 = new Epic("Эпик2", "Описание эпика2", TaskTypes.EPIC);
+//        Epic epic2 = new Epic(0, "Эпик2", "Описание эпика2", TaskStatus.NEW, TaskTypes.EPIC);
 //        manager.makeNewEpic(epic2);
 //
 //        // Проверка удаления из истории просмотров (в том числе при удалении задач)
@@ -79,10 +79,10 @@ public class Main {
 //    }
 
         FileBackedTaskManager manager = FileBackedTaskManager.loadFromFile(new File("C:\\Java_course\\homework\\Sprint_4_and_further\\java-kanban\\fileBacked"));
-        Task task1 = new Task(0,"Задача1", "Описание задачи1",
+        Task task1 = new Task(0, "Задача1", "Описание задачи1",
                 TaskStatus.NEW, TaskTypes.TASK);
         manager.makeNewTask(task1);
-        Task task2 = new Task(0,"Задача2", "Описание задачи2",
+        Task task2 = new Task(0, "Задача2", "Описание задачи2",
                 TaskStatus.NEW, TaskTypes.TASK);
         manager.makeNewTask(task2);
         Epic epic1 = new Epic(0, "Эпик1", "Описание эпика1",
@@ -92,7 +92,7 @@ public class Main {
                 "Описание подзадачи1", TaskStatus.NEW, TaskTypes.SUBTASK,
                 epic1.getId());
         manager.makeNewSubtask(subTask1);
-        Subtask subTask2 = new Subtask(0,"Подзадача2",
+        Subtask subTask2 = new Subtask(0, "Подзадача2",
                 "Описание подзадачи2", TaskStatus.NEW, TaskTypes.SUBTASK,
                 epic1.getId());
         manager.makeNewSubtask(subTask2);
@@ -105,4 +105,5 @@ public class Main {
         manager.makeNewEpic(epic2);
     }
 }
+
 
