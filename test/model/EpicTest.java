@@ -11,7 +11,7 @@ class EpicTest {
     @Test
     void epicEqualsIfIdEquals() {
         Epic epic = new Epic(0, "Test epicEqualsIfIdEquals",
-                "Test epicEqualsIfIdEquals description", NEW, TaskTypes.EPIC);
+                "Test epicEqualsIfIdEquals description", TaskTypes.EPIC);
         TaskManager taskManager = Managers.getDefault();
         taskManager.makeNewEpic(epic);
         int epicId = epic.getId();
@@ -28,7 +28,7 @@ class EpicTest {
     void shouldNotAddEpicInItselfAsSubtask() {
         TaskManager taskManager = Managers.getDefault();
         Epic epic = new Epic(0, "Test shouldNotAddEpicInEpic",
-                "Test shouldNotAddEpicInEpic description", NEW, TaskTypes.EPIC);
+                "Test shouldNotAddEpicInEpic description", TaskTypes.EPIC);
         taskManager.makeNewEpic(epic);
         Subtask subtask = new Subtask(0,"Test shouldNotAddEpicInEpic",
                 "Test shouldNotAddEpicInEpic description", NEW,

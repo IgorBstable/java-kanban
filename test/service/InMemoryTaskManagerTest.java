@@ -22,5 +22,7 @@ class InMemoryTaskManagerTest extends TaskManagerTest <InMemoryTaskManager> {
         setup().subtaskShouldNotSaveOldId();
         setup().epicDoNotContainNonActualSubtaskId();
         setup().settersTest();
+        setup().newManager();
+        setup().taskEqualsAfterAdd();
     }
 }

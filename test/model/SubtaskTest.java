@@ -11,7 +11,7 @@ class SubtaskTest {
     @Test
     void subtaskEqualsIfIdEquals() {
         Epic epic = new Epic(0, "Test addNewSubtask",
-                "Test addNewSubtask description", NEW, TaskTypes.EPIC);
+                "Test addNewSubtask description", TaskTypes.EPIC);
         TaskManager taskManager = Managers.getDefault();
         taskManager.makeNewEpic(epic);
         Subtask subTask = new Subtask(0, "Test addNewTask",
@@ -34,7 +34,7 @@ class SubtaskTest {
         TaskManager taskManager = Managers.getDefault();
         Epic epic = new Epic(0, "Test shouldNotMakeSubtaskAsEpic",
                 "Test shouldNotMakeSubtaskAsEpic description",
-                NEW, TaskTypes.EPIC);
+                TaskTypes.EPIC);
         taskManager.makeNewEpic(epic);
         Subtask subTask = new Subtask(0, "Test shouldNotMakeSubtaskAsEpic",
                 "Test shouldNotMakeSubtaskAsEpic description", NEW,
@@ -42,7 +42,7 @@ class SubtaskTest {
         taskManager.makeNewSubtask(subTask);
         Epic epic1 = new Epic(0, "Test shouldNotMakeSubtaskAsEpic",
                 "Test shouldNotMakeSubtaskAsEpic description",
-                NEW, TaskTypes.EPIC);
+                TaskTypes.EPIC);
         taskManager.makeNewEpic(epic1);
 
         assertNotEquals(subTask.getId(), epic1.getId());

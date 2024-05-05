@@ -7,10 +7,11 @@ public class Task {
     private String description;
     private TaskStatus status;
     private final TaskTypes type;
-    private int id = 0;
+    private int id;
 
 
     public Task(int id, String name, String description, TaskStatus status, TaskTypes type) {
+        this.id = id;
         this.name = name;
         this.description = description;
         this.status = status;

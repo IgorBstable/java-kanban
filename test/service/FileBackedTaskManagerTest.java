@@ -31,6 +31,8 @@ public class FileBackedTaskManagerTest extends TaskManagerTest <FileBackedTaskMa
         setup().subtaskShouldNotSaveOldId();
         setup().epicDoNotContainNonActualSubtaskId();
         setup().settersTest();
+        setup().newManager();
+        setup().taskEqualsAfterAdd();
     }
 
     // Далее следуют тесты, специфичные для FileBackedTaskManager
@@ -56,6 +58,9 @@ public class FileBackedTaskManagerTest extends TaskManagerTest <FileBackedTaskMa
     @Test
     void saveEmptyFileTest() throws IOException {
         File file = new File("fileBacked");
+        Writer fileWriter = new FileWriter(file);
+        fileWriter.write("");
+        fileWriter.close();
         String backedContent = Files.readString(file.toPath());
         assertEquals(backedContent.length(), 0);
     }

@@ -22,7 +22,7 @@ public abstract class TaskManagerTest<T extends TaskManager> {
                 "Test addTasks description", NEW, TaskTypes.TASK);
         taskManager.makeNewTask(task);
         Epic epic = new Epic(0, "Test addTasks",
-                "Test addTasks description", NEW, TaskTypes.EPIC);
+                "Test addTasks description", TaskTypes.EPIC);
         taskManager.makeNewEpic(epic);
         Subtask subtask = new Subtask(0, "Test addTasks",
                 "Test addTasks description", NEW, TaskTypes.SUBTASK, epic.getId());
@@ -59,7 +59,7 @@ public abstract class TaskManagerTest<T extends TaskManager> {
 
     public void updateSubTask() {
         Task epic = new Epic(0, "Test updateSubTask",
-                "Test updateSubTask description", NEW, TaskTypes.EPIC);
+                "Test updateSubTask description", TaskTypes.EPIC);
         taskManager.makeNewEpic(epic);
         Task subtask = new Subtask(0, "Test updateSubTask",
                 "Test updateSubTask description", NEW,
@@ -75,7 +75,7 @@ public abstract class TaskManagerTest<T extends TaskManager> {
 
     public void delSubtasks() {
         Task epic = new Epic(0, "Test delSubtasks",
-                "Test delSubtasks description", NEW, TaskTypes.EPIC);
+                "Test delSubtasks description", TaskTypes.EPIC);
         taskManager.makeNewEpic(epic);
         Task subtask = new Subtask(0, "Test delSubtasks",
                 "Test delSubtasks description", NEW,
@@ -91,10 +91,10 @@ public abstract class TaskManagerTest<T extends TaskManager> {
 
     public void deleteEpics() {
         Task epic = new Epic(0, "Test deleteEpics",
-                "Test deleteEpics description", NEW, TaskTypes.EPIC);
+                "Test deleteEpics description", TaskTypes.EPIC);
         taskManager.makeNewEpic(epic);
         Task epic1 = new Epic(0, "Test deleteEpics #1",
-                "Test deleteEpics description #1", NEW, TaskTypes.EPIC);
+                "Test deleteEpics description #1", TaskTypes.EPIC);
         taskManager.makeNewEpic(epic1);
         taskManager.deleteEpics();
         assertEquals(0, taskManager.getAllEpics().size());
@@ -102,10 +102,10 @@ public abstract class TaskManagerTest<T extends TaskManager> {
 
     public void delEpicById() {
         Task epic = new Epic(0, "Test delEpicById",
-                "Test delEpicById description", NEW, TaskTypes.EPIC);
+                "Test delEpicById description", TaskTypes.EPIC);
         taskManager.makeNewEpic(epic);
         Task epic1 = new Epic(0, "Test delEpicById #1",
-                "Test delEpicById description #1", NEW, TaskTypes.EPIC);
+                "Test delEpicById description #1", TaskTypes.EPIC);
         taskManager.makeNewEpic(epic1);
         taskManager.delEpicById(1);
         assertEquals(List.of(epic1), taskManager.getAllEpics());
@@ -115,7 +115,7 @@ public abstract class TaskManagerTest<T extends TaskManager> {
     public void subtaskShouldNotSaveOldId() {
         Task epic = new Epic(0, "Test subtaskShouldNotSaveOldId",
                 "Test subtaskShouldNotSaveOldId description",
-                NEW, TaskTypes.EPIC);
+                TaskTypes.EPIC);
         taskManager.makeNewEpic(epic);
         Task subtask = new Subtask(0, "Test subtaskShouldNotSaveOldId",
                 "Test subtaskShouldNotSaveOldId description",
@@ -129,7 +129,7 @@ public abstract class TaskManagerTest<T extends TaskManager> {
     public void epicDoNotContainNonActualSubtaskId() {
         Task epic = new Epic(0, "Test epicDoNotContainNonActualSubtaskId",
                 "Test epicDoNotContainNonActualSubtaskId description",
-                NEW, TaskTypes.EPIC);
+                TaskTypes.EPIC);
         taskManager.makeNewEpic(epic);
         Task subtask1 = new Subtask(0, "Test epicDoNotContainNonActualSubtaskId #1",
                 "Test epicDoNotContainNonActualSubtaskId description #1",
@@ -161,5 +161,29 @@ public abstract class TaskManagerTest<T extends TaskManager> {
     }
     // Проверка сеттеров подтвердила наше предположение.
     // Проблема может быть решена изменением модификаторов доступа для сеттеров на private.
+
+    // Проверяем, что утилитарный класс всегда возвращает
+    // проинициализированные и готовые к работе экземпляры менеджеров
+    // (проверка сделана исходя из тезиса о том, что проинициализированный
+    // и готовый к работе экземпляр менеджера должен быть способен исполнять методы
+    // класса (в данном случае для примера взял метод makeNewTask)).
+    void newManager() {
+        Task task = new Task(0, "Test newManager",
+                "Test newManager description", NEW, TaskTypes.TASK);
+        taskManager.makeNewTask(task);
+        assertEquals(List.of(task), taskManager.getAllTasks());
+    }
+
+    // проверяем неизменность задачи (по всем полям) при добавлении задачи в менеджер
+    void taskEqualsAfterAdd() {
+        Task task = new Task(0, "Test taskEqualsAfterAdd",
+                "Test taskEqualsAfterAdd description", NEW, TaskTypes.TASK);
+        taskManager.makeNewTask(task);
+
+        assertEquals("Test taskEqualsAfterAdd", task.getName());
+        assertEquals("Test taskEqualsAfterAdd description", task.getDescription());
+        assertEquals(NEW, task.getStatus());
+        assertEquals(1, task.getId());
+    }
 }
 

@@ -24,19 +24,9 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     }
 
     @Override
-    public ArrayList<Task> getAllTasks() {
-        return super.getAllTasks();
-    }
-
-    @Override
     public void deleteTasks() {
         super.deleteTasks();
         save();
-    }
-
-    @Override
-    public Task getTaskById(int id) {
-        return super.getTaskById(id);
     }
 
     @Override
@@ -58,11 +48,6 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     }
 
     @Override
-    public ArrayList<Task> getAllSubtasks() {
-        return super.getAllSubtasks();
-    }
-
-    @Override
     public void delSubtasks() {
         super.delSubtasks();
         save();
@@ -72,11 +57,6 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     public void delSubtaskById(int id) {
         super.delSubtaskById(id);
         save();
-    }
-
-    @Override
-    public Task getSubtaskById(int id) {
-        return super.getSubtaskById(id);
     }
 
     @Override
@@ -92,19 +72,9 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     }
 
     @Override
-    public ArrayList<Task> getAllEpics() {
-        return super.getAllEpics();
-    }
-
-    @Override
     public void deleteEpics() {
         super.deleteEpics();
         save();
-    }
-
-    @Override
-    public Task getEpicById(Integer id) {
-        return super.getEpicById(id);
     }
 
     @Override
@@ -113,20 +83,9 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         save();
     }
 
-    @Override
-    public ArrayList<Task> getListOfSubTasksOfEpic(int id) {
-        return super.getListOfSubTasksOfEpic(id);
-    }
-
     protected void updateEpicStatus(Task subtask) {
         super.updateEpicStatus(subtask);
         save();
-    }
-
-
-    @Override
-    public List<Task> getHistoryManager() {
-        return super.getHistoryManager();
     }
 
     private void save() {
@@ -151,23 +110,25 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 
     private static Task fromString(String value) {
         String[] task = value.split(",");
-        if (task[1].equals(TaskTypes.TASK.toString())) {
-            int id = Integer.parseInt(task[0]);
-            Task taskFromS = new Task(0, task[2], task[4],
-                    TaskStatus.valueOf(task[3]), TaskTypes.valueOf(task[1]));
+        int id = Integer.parseInt(task[0]);
+        TaskTypes type = TaskTypes.valueOf(task[1]);
+        String name = task[2];
+        TaskStatus status = TaskStatus.valueOf(task[3]);
+        String description = task[4];
+        if (type.equals(TaskTypes.TASK)) {
+            Task taskFromS = new Task(0, name, description,
+                    status, type);
             taskFromS.setId(id);
             return taskFromS;
-        } else if (task[1].equals(TaskTypes.SUBTASK.toString())) {
-            int id = Integer.parseInt(task[0]);
-            Task subTaskFromS = new Subtask(0, task[2], task[4],
-                    TaskStatus.valueOf(task[3]), TaskTypes.valueOf(task[1]),
-                    Integer.parseInt(task[5]));
+        } else if (type.equals(TaskTypes.SUBTASK)) {
+            int epicId = Integer.parseInt(task[5]);
+            Task subTaskFromS = new Subtask(0, name, description,
+                    status, type, epicId);
             subTaskFromS.setId(id);
             return subTaskFromS;
         }
-        int id = Integer.parseInt(task[0]);
-        Task epicFromS = new Epic(0, task[2], task[4],
-                TaskStatus.valueOf(task[3]), TaskTypes.valueOf(task[1]));
+        Task epicFromS = new Epic(0, name, description,
+                type);
         epicFromS.setId(id);
         return epicFromS;
     }
