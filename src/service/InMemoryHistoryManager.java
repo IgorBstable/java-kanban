@@ -10,7 +10,7 @@ public class InMemoryHistoryManager implements HistoryManager {
     private Node first;
     private Node last;
 
-    public Node linkLast(Task task) {
+    private Node linkLast(Task task) {
         final Node l = last;
         final Node newNode = new Node(l, task, null);
         last = newNode;

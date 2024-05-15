@@ -6,13 +6,16 @@ public class Task {
     private String name;
     private String description;
     private TaskStatus status;
-    private int id = 0;
+    private final TaskTypes type;
+    private int id;
 
 
-    public Task(String name, String description, TaskStatus status) {
+    public Task(int id, String name, String description, TaskStatus status, TaskTypes type) {
+        this.id = id;
         this.name = name;
         this.description = description;
         this.status = status;
+        this.type = type;
     }
 
     public String getName() {
@@ -47,6 +50,10 @@ public class Task {
         this.id = id;
     }
 
+    public TaskTypes getType() {
+        return type;
+    }
+
     @Override
     public boolean equals(Object object) {
         if (this == object) return true;
@@ -63,10 +70,7 @@ public class Task {
 
     @Override
     public String toString() {
-        return '{' + "Название = " + name + '\'' +
-                ", Описание =" + description + '\'' +
-                ", Статус =" + status +
-                ", id =" + id +
-                '}';
-    }
+        return id + "," + type + "," + name + ","
+                + status + "," + description;
+   }
 }

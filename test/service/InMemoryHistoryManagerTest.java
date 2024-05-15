@@ -15,8 +15,8 @@ class InMemoryHistoryManagerTest {
     void taskVersionsInHistoryManager() {
         TaskManager inMemoryTaskManager = Managers.getDefault();
         HistoryManager historyManager = Managers.getDefaultHistory();
-        Task task = new Task("Test taskVersionsInHistoryManager",
-                "Data 01", NEW);
+        Task task = new Task(0, "Test taskVersionsInHistoryManager",
+                "Data 01", NEW, TaskTypes.TASK);
         inMemoryTaskManager.makeNewTask(task);
         historyManager.add(task);
         task.setDescription("Data 02");
@@ -31,7 +31,7 @@ class InMemoryHistoryManagerTest {
     void add() {
         TaskManager inMemoryTaskManager = Managers.getDefault();
         HistoryManager historyManager = Managers.getDefaultHistory();
-        Task task = new Task("Test addNewTask", "Test addNewTask description", NEW);
+        Task task = new Task(0, "Test addNewTask", "Test addNewTask description", NEW, TaskTypes.TASK);
         inMemoryTaskManager.makeNewTask(task);
         historyManager.add(task);
         final List<Task> history = historyManager.getHistory();
@@ -46,8 +46,8 @@ class InMemoryHistoryManagerTest {
     @Test
     void linkedListTest() {
         TaskManager taskManager = Managers.getDefault();
-        Task task = new Task("Test linkedListTest",
-                "Test linkedListTest description", NEW);
+        Task task = new Task(0,"Test linkedListTest",
+                "Test linkedListTest description", NEW, TaskTypes.TASK);
         taskManager.makeNewTask(task);
         taskManager.getTaskById(1);
         taskManager.getTaskById(1);
@@ -58,11 +58,11 @@ class InMemoryHistoryManagerTest {
     @Test
     void remove() {
         TaskManager taskManager = Managers.getDefault();
-        Task task1 = new Task("Test remove #1",
-                "Test remove description #1", NEW);
+        Task task1 = new Task(0, "Test remove #1",
+                "Test remove description #1", NEW, TaskTypes.TASK);
         taskManager.makeNewTask(task1);
-        Task task2 = new Task("Test remove #2",
-                "Test remove description #2", NEW);
+        Task task2 = new Task(0, "Test remove #2",
+                "Test remove description #2", NEW, TaskTypes.TASK);
         taskManager.makeNewTask(task2);
         taskManager.getTaskById(1);
         taskManager.getTaskById(2);

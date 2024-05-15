@@ -5,11 +5,11 @@ import model.*;
 import java.util.*;
 
 public class InMemoryTaskManager implements TaskManager {
-    private int taskId = 0;
-    private final Map<Integer, Task> tasks = new HashMap<>();
-    private final Map<Integer, Task> subTasks = new HashMap<>();
-    private final Map<Integer, Task> epics = new HashMap<>();
-    private final HistoryManager historyManager = Managers.getDefaultHistory();
+    protected int taskId = 0;
+    protected final Map<Integer, Task> tasks = new HashMap<>();
+    protected final Map<Integer, Task> subTasks = new HashMap<>();
+    protected final Map<Integer, Task> epics = new HashMap<>();
+    protected final HistoryManager historyManager = Managers.getDefaultHistory();
 
 
     private int makeId() {
@@ -199,7 +199,7 @@ public class InMemoryTaskManager implements TaskManager {
         return listOfSubTasksOfEpic;
     }
 
-    private void updateEpicStatus(Task subtask) {
+    protected void updateEpicStatus(Task subtask) {
         Subtask subtask1 = (Subtask) subtask;
         int epicId = subtask1.getEpicId();
         Task epic = epics.get(epicId);
