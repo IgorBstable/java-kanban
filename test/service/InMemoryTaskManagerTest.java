@@ -24,5 +24,7 @@ class InMemoryTaskManagerTest extends TaskManagerTest <InMemoryTaskManager> {
         setup().settersTest();
         setup().newManager();
         setup().taskEqualsAfterAdd();
+        setup().ifEpicExistsAndHasStatus();
+        setup().isIntersectionControlWorks();
     }
 }
