@@ -22,40 +22,34 @@ public class Main {
 
         Task task1 = new Task(0, "Задача1", "Описание задачи1",
                 TaskStatus.NEW, TaskTypes.TASK);
-        task1.setStartTime(LocalDateTime.of
-                (2024, 5, 19, 9,0));
+        task1.setStartTime(LocalDateTime.of(2024, 5, 19, 9,0));
         task1.setDuration(Duration.ofMinutes(30));
         manager.makeNewTask(task1);
         Task task2 = new Task(0, "Задача2", "Описание задачи2",
                 TaskStatus.NEW, TaskTypes.TASK);
-        task2.setStartTime(LocalDateTime.of
-                (2024, 5, 19, 9,20));
+        task2.setStartTime(LocalDateTime.of(2024, 5, 19, 9,20));
         task2.setDuration(Duration.ofMinutes(40));
         manager.makeNewTask(task2);
         Epic epic1 = new Epic(0, "Эпик1", "Описание эпика1");
-        epic1.setStartTime(LocalDateTime.of
-                (2024, 5, 19, 11,0));
+        epic1.setStartTime(LocalDateTime.of(2024, 5, 19, 11,0));
         epic1.setDuration(Duration.ofMinutes(50));
         manager.makeNewEpic(epic1);
         Subtask subTask1 = new Subtask(0, "Подзадача1",
                 "Описание подзадачи1", TaskStatus.NEW,
                 epic1.getId());
-        subTask1.setStartTime(LocalDateTime.of
-                (2024, 5, 19, 11,0));
+        subTask1.setStartTime(LocalDateTime.of(2024, 5, 19, 11,0));
         subTask1.setDuration(Duration.ofMinutes(10));
         manager.makeNewSubtask(subTask1);
         Subtask subTask2 = new Subtask(0, "Подзадача2",
                 "Описание подзадачи2", TaskStatus.NEW,
                 epic1.getId());
-        subTask2.setStartTime(LocalDateTime.of
-                (2024, 5, 19, 11,15));
+        subTask2.setStartTime(LocalDateTime.of(2024, 5, 19, 11,15));
         subTask2.setDuration(Duration.ofMinutes(10));
         manager.makeNewSubtask(subTask2);
         Subtask subTask3 = new Subtask(0, "Подзадача3",
                 "Описание подзадачи3", TaskStatus.NEW,
                 epic1.getId());
-        subTask3.setStartTime(LocalDateTime.of
-                (2024, 5, 19, 11,30));
+        subTask3.setStartTime(LocalDateTime.of(2024, 5, 19, 11,30));
         subTask3.setDuration(Duration.ofMinutes(10));
         manager.makeNewSubtask(subTask3);
         Epic epic2 = new Epic(0, "Эпик2", "Описание эпика2");
