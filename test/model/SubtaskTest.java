@@ -5,21 +5,27 @@ import org.junit.jupiter.api.Test;
 import static model.TaskStatus.*;
 import service.*;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
+
 class SubtaskTest {
 
     // проверяем, что экземпляры класса Subtask равны друг другу, если равен их id
     @Test
     void subtaskEqualsIfIdEquals() {
         Epic epic = new Epic(0, "Test addNewSubtask",
-                "Test addNewSubtask description", TaskTypes.EPIC);
+                "Test addNewSubtask description");
+        epic.setStartTime(LocalDateTime.now());
+        epic.setDuration(Duration.ofMinutes(10));
         TaskManager taskManager = Managers.getDefault();
         taskManager.makeNewEpic(epic);
-        Subtask subTask = new Subtask(0, "Test addNewTask",
-                "Test addNewTask description", NEW,
-                TaskTypes.SUBTASK, epic.getId());
-        taskManager.makeNewSubtask(subTask);
+        Subtask subtask = new Subtask(0, "Test addNewTask",
+                "Test addNewTask description", NEW, epic.getId());
+        subtask.setStartTime(LocalDateTime.now().plus(Duration.ofMinutes(5)));
+        subtask.setDuration(Duration.ofMinutes(5));
+        taskManager.makeNewSubtask(subtask);
 
-        int subTaskId = subTask.getId();
+        int subTaskId = subtask.getId();
 
         assertEquals(taskManager.getSubtaskById(subTaskId), taskManager.getSubtaskById(subTaskId),
                 "Подзадачи с одинаковым id не совпадают");
@@ -33,19 +39,22 @@ class SubtaskTest {
     void shouldNotMakeSubtaskAsItselfEpic() {
         TaskManager taskManager = Managers.getDefault();
         Epic epic = new Epic(0, "Test shouldNotMakeSubtaskAsEpic",
-                "Test shouldNotMakeSubtaskAsEpic description",
-                TaskTypes.EPIC);
+                "Test shouldNotMakeSubtaskAsEpic description");
+        epic.setStartTime(LocalDateTime.now());
+        epic.setDuration(Duration.ofMinutes(10));
         taskManager.makeNewEpic(epic);
-        Subtask subTask = new Subtask(0, "Test shouldNotMakeSubtaskAsEpic",
-                "Test shouldNotMakeSubtaskAsEpic description", NEW,
-                TaskTypes.SUBTASK, epic.getId());
-        taskManager.makeNewSubtask(subTask);
+        Subtask subtask = new Subtask(0, "Test shouldNotMakeSubtaskAsEpic",
+                "Test shouldNotMakeSubtaskAsEpic description", NEW, epic.getId());
+        subtask.setStartTime(LocalDateTime.now().plus(Duration.ofMinutes(20)));
+        subtask.setDuration(Duration.ofMinutes(10));
+        taskManager.makeNewSubtask(subtask);
         Epic epic1 = new Epic(0, "Test shouldNotMakeSubtaskAsEpic",
-                "Test shouldNotMakeSubtaskAsEpic description",
-                TaskTypes.EPIC);
+                "Test shouldNotMakeSubtaskAsEpic description");
+        epic1.setStartTime(LocalDateTime.now().plus(Duration.ofMinutes(40)));
+        epic1.setDuration(Duration.ofMinutes(10));
         taskManager.makeNewEpic(epic1);
 
-        assertNotEquals(subTask.getId(), epic1.getId());
+        assertNotEquals(subtask.getId(), epic1.getId());
         // Таким образом, id у эпика и подзадачи РАЗНЫЕ
         // т.е. работает модель, в которой можно сделать эпик с содержанием,
         // идентичным содержанию подзадачи.
