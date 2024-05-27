@@ -49,8 +49,8 @@ public class FileBackedTaskManagerTest extends TaskManagerTest <FileBackedTaskMa
         Writer fileWriter = new FileWriter(file);
         fileWriter.write("");
         fileWriter.close();
-        TaskManager manager = FileBackedTaskManager.
-                loadFromFile(new File("fileBacked.csv"));
+        FileBackedTaskManager manager = new FileBackedTaskManager(file);
+        manager.loadFromFile(file);
         ArrayList<Task> tasks = manager.getAllTasks();
         ArrayList<Task> subTasks = manager.getAllSubtasks();
         ArrayList<Task> epics = manager.getAllEpics();
@@ -110,7 +110,8 @@ public class FileBackedTaskManagerTest extends TaskManagerTest <FileBackedTaskMa
                 """;
         fileWriter.write(content);
         fileWriter.close();
-        FileBackedTaskManager manager = FileBackedTaskManager.loadFromFile(file);
+        FileBackedTaskManager manager = new FileBackedTaskManager(file);
+        manager.loadFromFile(file);
         String name = manager.getTaskById(1).getName();
         assertEquals(name, "Задача1");
     }
@@ -127,8 +128,9 @@ public class FileBackedTaskManagerTest extends TaskManagerTest <FileBackedTaskMa
                 """;
         fileWriter.write(content);
         fileWriter.close();
+        FileBackedTaskManager manager = new FileBackedTaskManager(file);
         assertThrows(ArrayIndexOutOfBoundsException.class,
-                () -> FileBackedTaskManager.loadFromFile(file));
+                () -> manager.loadFromFile(file));
     }
 }
 

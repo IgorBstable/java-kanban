@@ -61,8 +61,8 @@ public abstract class TaskManagerTest<T extends TaskManager> {
         taskManager.makeNewTask(task);
         Task task1 = new Task(0, "Test deleteTasks #1",
                 "Test deleteTasks description #1", NEW, TaskTypes.TASK);
-        task.setStartTime(LocalDateTime.now().plus(Duration.ofMinutes(5)));
-        task.setDuration(Duration.ofMinutes(5));
+        task1.setStartTime(LocalDateTime.now().plus(Duration.ofMinutes(10)));
+        task1.setDuration(Duration.ofMinutes(5));
         taskManager.makeNewTask(task1);
         taskManager.deleteTasks();
         assertEquals(0, taskManager.getAllTasks().size());
@@ -76,13 +76,13 @@ public abstract class TaskManagerTest<T extends TaskManager> {
         taskManager.makeNewEpic(epic);
         Task subtask = new Subtask(0, "Test updateSubTask",
                 "Test updateSubTask description", NEW, 1);
-        subtask.setStartTime(LocalDateTime.now().plus(Duration.ofMinutes(5)));
+        subtask.setStartTime(LocalDateTime.now());
         subtask.setDuration(Duration.ofMinutes(5));
         taskManager.makeNewSubtask(subtask);
         Task subtask1 = new Subtask(0, "Test updateSubTask #1",
                 "Test updateSubTask description #1", NEW, 1);
-        subtask.setStartTime(LocalDateTime.now().plus(Duration.ofMinutes(5)));
-        subtask.setDuration(Duration.ofMinutes(5));
+        subtask1.setStartTime(LocalDateTime.now().plus(Duration.ofMinutes(10)));
+        subtask1.setDuration(Duration.ofMinutes(5));
         subtask1.setId(2);
         taskManager.updateSubTask(subtask1);
         assertEquals("Test updateSubTask #1", taskManager.getSubtaskById(2).getName());

@@ -85,16 +85,6 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         save();
     }
 
-    protected void updateEpicStatus(Task subtask) {
-        super.updateEpicStatus(subtask);
-        save();
-    }
-
-    protected void updateEpicStartAndEndTime(Task subtask) {
-        super.updateEpicStartAndEndTime(subtask);
-        save();
-    }
-
     private void save() {
         try (Writer filewriter = new FileWriter(file)) {
             filewriter.write("id,type,name,status,description,start,duration,end,epic\n");
@@ -147,31 +137,49 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
             return subTaskFromS;
         }
         Task epicFromS = new Epic(0, name, description);
-        epicFromS.setId(id);
-        epicFromS.setStartTime(startTime);
-        epicFromS.setDuration(duration);
+        Epic epicFromS1 = (Epic) epicFromS;
+        epicFromS1.setId(id);
+        epicFromS1.setStartTime(startTime);
+        epicFromS1.setDuration(duration);
+        if (startTime == null || duration == null) {
+            epicFromS1.setEndTime(null);
+        } else {
+            epicFromS1.setEndTime(startTime.plus(duration));
+        }
         return epicFromS;
     }
 
-    public static FileBackedTaskManager loadFromFile(File file) throws IOException {
+    public void loadFromFile(File file) throws IOException {
         String backedContent = Files.readString(file.toPath());
         String[] contentList = backedContent.split("\n");
-        FileBackedTaskManager fbtm = new FileBackedTaskManager(file);
         int maxId = 0;
         for (int i = 1; i < contentList.length; i++) {
             Task task = fromString(contentList[i]);
             if (task.getId() > maxId) {
                 maxId = task.getId();
             }
-            if (task.getType().equals(TaskTypes.TASK)) {
-                fbtm.tasks.put(task.getId(), task);
-            } else if (task.getType().equals(TaskTypes.SUBTASK)) {
-                fbtm.subTasks.put(task.getId(), task);
+            if (task.getType().equals(TaskTypes.TASK) && isTaskNotIntersected(task)) {
+                this.tasks.put(task.getId(), task);
+            } else if (task.getType().equals(TaskTypes.SUBTASK) && isTaskNotIntersected(task)) {
+                this.subTasks.put(task.getId(), task);
             } else if (task.getType().equals(TaskTypes.EPIC)) {
-                fbtm.epics.put(task.getId(), task);
+                this.epics.put(task.getId(), task);
             }
-            fbtm.taskId = maxId;
+            this.taskId = maxId;
         }
-        return fbtm;
+
+        ArrayList<Task> allTasks = this.getAllTasks();
+        ArrayList<Task> allSubtasks = this.getAllSubtasks();
+
+        for (Task task : allTasks) {
+            if (task.getStartTime() != null) {
+                this.prioritizedTasks.add(task);
+            }
+        }
+        for (Task task : allSubtasks) {
+            if (task.getStartTime() != null) {
+                this.prioritizedTasks.add(task);
+            }
+        }
     }
 }
