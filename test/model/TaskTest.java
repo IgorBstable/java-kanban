@@ -1,5 +1,7 @@
 package model;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
@@ -14,6 +16,8 @@ class TaskTest {
     void taskEqualsIfIdEquals() {
         Task task = new Task(0, "Test taskEqualsIfIdEquals",
                 "Test taskEqualsIfIdEquals description", NEW, TaskTypes.TASK);
+        task.setStartTime(LocalDateTime.now());
+        task.setDuration(Duration.ofMinutes(5));
         TaskManager taskManager = Managers.getDefault();
         taskManager.makeNewTask(task);
         int taskId = task.getId();
@@ -29,10 +33,14 @@ class TaskTest {
         TaskManager taskManager = Managers.getDefault();
         Task task = new Task(0, "Test ShouldNotConflictWhenSetIdAndGenerateId",
                 "task", NEW, TaskTypes.TASK);
+        task.setStartTime(LocalDateTime.now());
+        task.setDuration(Duration.ofMinutes(5));
         taskManager.makeNewTask(task);
         int id = task.getId();
         Task task1 = new Task(0, "Test ShouldNotConflictWhenSetIdAndGenerateId",
                 "task1", NEW, TaskTypes.TASK);
+        task.setStartTime(LocalDateTime.now().plus(Duration.ofMinutes(10)));
+        task.setDuration(Duration.ofMinutes(5));
         task1.setId(id);
         taskManager.makeNewTask(task1);
 
@@ -48,6 +56,8 @@ class TaskTest {
     void addNewTask() {
         Task task = new Task(0, "Test addNewTask",
                 "Test addNewTask description", NEW, TaskTypes.TASK);
+        task.setStartTime(LocalDateTime.now());
+        task.setDuration(Duration.ofMinutes(5));
         TaskManager taskManager = Managers.getDefault();
         taskManager.makeNewTask(task);
         int taskId = task.getId();
