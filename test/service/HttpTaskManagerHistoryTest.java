@@ -2,7 +2,10 @@ package service;
 
 import com.google.gson.*;
 import model.*;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
 import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -11,10 +14,24 @@ import java.net.http.HttpResponse;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public class HttpTaskManagerHistoryTest {
+
+    @BeforeEach
+    public void setUp() throws IOException {
+        HttpTaskServer.manager.deleteTasks();
+        HttpTaskServer.manager.delSubtasks();
+        HttpTaskServer.manager.deleteEpics();
+        HttpTaskServer.startServer();
+    }
+
+    @AfterEach
+    public void shutDown() {
+        HttpTaskServer.stopServer();
+    }
 
     @Test
     public void testGetHistory() throws IOException, InterruptedException {
@@ -46,8 +63,6 @@ public class HttpTaskManagerHistoryTest {
             task.setDuration(Duration.ofMinutes(5));
             task.setStartTime(LocalDateTime.of(2024, 7, 10, 10, 0));
             String jsonTask = gsonTasks.toJson(task);
-
-            HttpTaskServer.startServer();
 
             HttpRequest request1 = HttpRequest.newBuilder()
                     .uri(urlTasks)
@@ -131,7 +146,5 @@ public class HttpTaskManagerHistoryTest {
         assertEquals("Test 1 task", taskName);
         assertEquals("Test 1 subtask", subtaskName);
         assertEquals("Test 1 epic", epicName);
-
-        HttpTaskServer.stopServer();
     }
 }
