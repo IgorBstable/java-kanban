@@ -5,23 +5,23 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 
 public class Task {
-    private String name;
-    private String description;
-    private TaskStatus status;
-    private final TaskTypes type;
     private int id;
-    protected Duration duration;
+    private TaskTypes type;
+    private String name;
+    private TaskStatus status;
+    private String description;
     protected LocalDateTime startTime;
+    protected Duration duration;
 
 
     public Task(int id, String name, String description, TaskStatus status,
                 TaskTypes type) {
         this.id = id;
-        this.name = name;
-        this.description = description;
-        this.status = status;
         this.type = type;
-        }
+        this.name = name;
+        this.status = status;
+        this.description = description;
+    }
 
     public String getName() {
         return name;
@@ -65,6 +65,10 @@ public class Task {
 
     public TaskTypes getType() {
         return type;
+    }
+
+    public void setType(TaskTypes type) {
+        this.type = type;
     }
 
     public LocalDateTime getStartTime() {
@@ -115,5 +119,5 @@ public class Task {
                 + status + "," + description + ","
                 + startTime + "," + taskDur + ","
                 + getEndTime();
-   }
+    }
 }

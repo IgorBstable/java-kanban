@@ -1,7 +1,6 @@
 package service;
 
 import model.Task;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,5 +42,5 @@ public interface TaskManager {
 
     ArrayList<Task> getListOfSubTasksOfEpic(int id);
 
-    List<Task> getHistoryManager();
+    List<Task> getHistory();
 }
