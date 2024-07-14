@@ -6,6 +6,7 @@ import com.sun.net.httpserver.HttpHandler;
 import model.Task;
 import model.TaskStatus;
 import model.TaskTypes;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Type;
@@ -14,6 +15,7 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Optional;
+
 import static service.HttpTaskServer.manager;
 import static service.HttpTaskServer.message;
 
@@ -94,8 +96,7 @@ class TaskHandler extends BaseHttpHandler implements HttpHandler {
             message.sendTextAndData(exchange, taskJson);
         } catch (NotFoundException e) {
             message.sendNotFound(exchange, e.getMessage());
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             message.sendInternalServerError(exchange,
                     "Произошла ошибка при обработке запроса");
         }
