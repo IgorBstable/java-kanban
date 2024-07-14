@@ -25,6 +25,7 @@ public class HttpTaskManagerPrioritizedTest {
         HttpTaskServer.manager.deleteTasks();
         HttpTaskServer.manager.delSubtasks();
         HttpTaskServer.manager.deleteEpics();
+        HttpTaskServer.manager.deletePrioritized();
         HttpTaskServer.startServer();
     }
 

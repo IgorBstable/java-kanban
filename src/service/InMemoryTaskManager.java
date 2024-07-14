@@ -343,4 +343,8 @@ public class InMemoryTaskManager implements TaskManager {
     public List<Task> getHistory() {
         return historyManager.getHistory();
     }
+
+    public void deletePrioritized() {
+        prioritizedTasks.clear();
+    }
 }
