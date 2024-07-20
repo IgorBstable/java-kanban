@@ -4,6 +4,7 @@ import com.google.gson.*;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import model.*;
+
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -52,22 +53,12 @@ class PrioritizedHandler extends BaseHttpHandler implements HttpHandler {
     }
 
     private String taskToJson(Task task) {
-        Gson gson = new GsonBuilder()
-                .serializeNulls()
-                .setPrettyPrinting()
-                .registerTypeAdapter(Task.class, new TaskHandler.TaskSerializer())
-                .create();
-
+        Gson gson = Serializers.taskToGson;
         return gson.toJson(task);
     }
 
     private String subtaskToJson(Task task) {
-        Gson gson = new GsonBuilder()
-                .serializeNulls()
-                .setPrettyPrinting()
-                .registerTypeAdapter(Subtask.class, new SubtaskHandler.SubtaskSerializer())
-                .create();
-
+        Gson gson = Serializers.subtaskToGson;
         return gson.toJson(task);
     }
 

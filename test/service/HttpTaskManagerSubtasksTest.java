@@ -1,10 +1,7 @@
 package service;
 
 import com.google.gson.*;
-import model.Epic;
-import model.Subtask;
-import model.Task;
-import model.TaskStatus;
+import model.*;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -48,11 +45,7 @@ public class HttpTaskManagerSubtasksTest {
                 TaskStatus.NEW, epicId);
         subtask2.setDuration(Duration.ofMinutes(5));
         subtask2.setStartTime(LocalDateTime.of(2024, 7, 11, 10, 30));
-        Gson gson = new GsonBuilder()
-                .serializeNulls()
-                .setPrettyPrinting()
-                .registerTypeAdapter(Subtask.class, new SubtaskHandler.SubtaskSerializer())
-                .create();
+        Gson gson = Serializers.subtaskToGson;
         String Json1 = gson.toJson(subtask1);
         String Json2 = gson.toJson(subtask2);
         HttpResponse<String> response;
@@ -99,11 +92,7 @@ public class HttpTaskManagerSubtasksTest {
                 TaskStatus.NEW, epicId);
         subtask1.setDuration(Duration.ofMinutes(5));
         subtask1.setStartTime(LocalDateTime.of(2024, 7, 11, 11, 0));
-        Gson gson = new GsonBuilder()
-                .serializeNulls()
-                .setPrettyPrinting()
-                .registerTypeAdapter(Subtask.class, new SubtaskHandler.SubtaskSerializer())
-                .create();
+        Gson gson = Serializers.subtaskToGson;
         String Json1 = gson.toJson(subtask1);
         HttpResponse<String> response;
         try (HttpClient client = HttpClient.newHttpClient()) {
@@ -145,11 +134,7 @@ public class HttpTaskManagerSubtasksTest {
                 TaskStatus.NEW, epicId);
         subtask1.setDuration(Duration.ofMinutes(5));
         subtask1.setStartTime(LocalDateTime.of(2024, 7, 11, 12, 0));
-        Gson gson = new GsonBuilder()
-                .serializeNulls()
-                .setPrettyPrinting()
-                .registerTypeAdapter(Subtask.class, new SubtaskHandler.SubtaskSerializer())
-                .create();
+        Gson gson = Serializers.subtaskToGson;
         String Json1 = gson.toJson(subtask1);
         HttpResponse<String> response;
         try (HttpClient client = HttpClient.newHttpClient()) {
@@ -182,11 +167,7 @@ public class HttpTaskManagerSubtasksTest {
                 TaskStatus.NEW, epicId);
         subtask2.setDuration(Duration.ofMinutes(5));
         subtask2.setStartTime(LocalDateTime.of(2024, 7, 11, 13, 30));
-        Gson gson = new GsonBuilder()
-                .serializeNulls()
-                .setPrettyPrinting()
-                .registerTypeAdapter(Subtask.class, new SubtaskHandler.SubtaskSerializer())
-                .create();
+        Gson gson = Serializers.subtaskToGson;
         String Json1 = gson.toJson(subtask1);
         HttpResponse<String> response;
         try (HttpClient client = HttpClient.newHttpClient()) {
@@ -233,11 +214,7 @@ public class HttpTaskManagerSubtasksTest {
                 TaskStatus.NEW, epicId);
         subtask2.setDuration(Duration.ofMinutes(5));
         subtask2.setStartTime(LocalDateTime.of(2024, 7, 11, 14, 30));
-        Gson gson = new GsonBuilder()
-                .serializeNulls()
-                .setPrettyPrinting()
-                .registerTypeAdapter(Subtask.class, new SubtaskHandler.SubtaskSerializer())
-                .create();
+        Gson gson = Serializers.subtaskToGson;
         String Json1 = gson.toJson(subtask1);
         String Json2 = gson.toJson(subtask2);
         HttpResponse<String> response;

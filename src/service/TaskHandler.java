@@ -3,23 +3,17 @@ package service;
 import com.google.gson.*;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
+import model.Serializers;
 import model.Task;
-import model.TaskStatus;
-import model.TaskTypes;
-
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.reflect.Type;
 import java.nio.charset.StandardCharsets;
-import java.time.Duration;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Optional;
-
 import static service.HttpTaskServer.manager;
 import static service.HttpTaskServer.message;
 
-class TaskHandler extends BaseHttpHandler implements HttpHandler {
+public class TaskHandler extends BaseHttpHandler implements HttpHandler {
 
     public TaskHandler() {
     }
@@ -60,11 +54,7 @@ class TaskHandler extends BaseHttpHandler implements HttpHandler {
     private void handleGetTasks(HttpExchange exchange) throws IOException {
         try {
             ArrayList<Task> tasks = manager.getAllTasks();
-            Gson gson = new GsonBuilder()
-                    .serializeNulls()
-                    .setPrettyPrinting()
-                    .registerTypeAdapter(Task.class, new TaskSerializer())
-                    .create();
+            Gson gson = Serializers.taskToGson;
 
             String tasksArrayJson = gson.toJson(tasks);
             message.sendTextAndData(exchange, tasksArrayJson);
@@ -86,12 +76,7 @@ class TaskHandler extends BaseHttpHandler implements HttpHandler {
             if (task == null) {
                 throw new NotFoundException("Задача не найдена!");
             }
-            Gson gson = new GsonBuilder()
-                    .serializeNulls()
-                    .setPrettyPrinting()
-                    .registerTypeAdapter(Task.class, new TaskSerializer())
-                    .create();
-
+            Gson gson = Serializers.taskToGson;
             String taskJson = gson.toJson(task);
             message.sendTextAndData(exchange, taskJson);
         } catch (NotFoundException e) {
@@ -198,10 +183,7 @@ class TaskHandler extends BaseHttpHandler implements HttpHandler {
             String input = new String(inputStream.readAllBytes(), StandardCharsets.UTF_8);
             JsonElement jsonElement = JsonParser.parseString(input);
             JsonObject jsonObject = jsonElement.getAsJsonObject();
-            Gson gson = new GsonBuilder()
-                    .setPrettyPrinting()
-                    .registerTypeAdapter(Task.class, new TaskDeserializer())
-                    .create();
+            Gson gson = Serializers.taskFromJson;
             return gson.fromJson(jsonObject, Task.class);
         } catch (Exception e) {
             message.sendNotFound(exchange, "Произошла ошибка!");
@@ -242,50 +224,5 @@ class TaskHandler extends BaseHttpHandler implements HttpHandler {
         UPDATE_TASK,
         DELETE_TASK,
         UNKNOWN
-    }
-
-    static class TaskSerializer implements JsonSerializer<Task> {
-        @Override
-        public JsonElement serialize(Task task, Type type,
-                                     JsonSerializationContext context) {
-            JsonObject result = new JsonObject();
-            result.addProperty("id", task.getId());
-            result.addProperty("type", task.getType().toString());
-            result.addProperty("name", task.getName());
-            result.addProperty("status", task.getStatus().toString());
-            result.addProperty("description", task.getDescription());
-            result.addProperty("startTime", task.getStartTime().toString());
-            result.addProperty("duration", task.getDuration().toString());
-            if (task.getEndTime() == null) {
-                result.addProperty("endTime", "");
-            } else {
-                result.addProperty("endTime", task.getEndTime().toString());
-            }
-
-            return result;
-        }
-    }
-
-    static class TaskDeserializer implements JsonDeserializer<Task> {
-        @Override
-        public Task deserialize(JsonElement jsonElement, Type type,
-                                JsonDeserializationContext context) throws JsonParseException {
-            JsonObject o = jsonElement.getAsJsonObject();
-            Task task = new Task(
-                    o.get("id").getAsInt(),
-                    o.get("name").getAsString(),
-                    o.get("description").getAsString(),
-                    TaskStatus.valueOf(o.get("status").getAsString()),
-                    TaskTypes.valueOf(o.get("type").getAsString())
-            );
-            String startTime = o.get("startTime").getAsString();
-            LocalDateTime localDateTime = LocalDateTime.parse(startTime);
-            task.setStartTime(localDateTime);
-            String duration = o.get("duration").getAsString();
-            Duration d = Duration.parse(duration);
-            task.setDuration(d);
-
-            return task;
-        }
     }
 }

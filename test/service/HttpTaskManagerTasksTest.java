@@ -1,6 +1,7 @@
 package service;
 
 import com.google.gson.*;
+import model.Serializers;
 import model.Task;
 import model.TaskStatus;
 import model.TaskTypes;
@@ -44,11 +45,7 @@ public class HttpTaskManagerTasksTest {
                 TaskStatus.NEW, TaskTypes.TASK);
         task2.setDuration(Duration.ofMinutes(5));
         task2.setStartTime(LocalDateTime.of(2024, 7, 10, 10, 30));
-        Gson gson = new GsonBuilder()
-                .serializeNulls()
-                .setPrettyPrinting()
-                .registerTypeAdapter(Task.class, new TaskHandler.TaskSerializer())
-                .create();
+        Gson gson = Serializers.taskToGson;
         String taskJson1 = gson.toJson(task1);
         String taskJson2 = gson.toJson(task2);
         HttpResponse<String> response;
@@ -92,11 +89,7 @@ public class HttpTaskManagerTasksTest {
                 TaskStatus.NEW, TaskTypes.TASK);
         task1.setDuration(Duration.ofMinutes(5));
         task1.setStartTime(LocalDateTime.of(2024, 7, 10, 11, 0));
-        Gson gson = new GsonBuilder()
-                .serializeNulls()
-                .setPrettyPrinting()
-                .registerTypeAdapter(Task.class, new TaskHandler.TaskSerializer())
-                .create();
+        Gson gson = Serializers.taskToGson;
         String taskJson1 = gson.toJson(task1);
         HttpResponse<String> response2;
         try (HttpClient client = HttpClient.newHttpClient()) {
@@ -139,11 +132,7 @@ public class HttpTaskManagerTasksTest {
                 TaskStatus.NEW, TaskTypes.TASK);
         task2.setDuration(Duration.ofMinutes(5));
         task2.setStartTime(LocalDateTime.of(2024, 7, 10, 12, 30));
-        Gson gson = new GsonBuilder()
-                .serializeNulls()
-                .setPrettyPrinting()
-                .registerTypeAdapter(Task.class, new TaskHandler.TaskSerializer())
-                .create();
+        Gson gson = Serializers.taskToGson;
         String taskJson1 = gson.toJson(task1);
         HttpResponse<String> response;
         try (HttpClient client = HttpClient.newHttpClient()) {
@@ -173,11 +162,7 @@ public class HttpTaskManagerTasksTest {
                 TaskStatus.NEW, TaskTypes.TASK);
         task2.setDuration(Duration.ofMinutes(5));
         task2.setStartTime(LocalDateTime.of(2024, 7, 10, 13, 30));
-        Gson gson = new GsonBuilder()
-                .serializeNulls()
-                .setPrettyPrinting()
-                .registerTypeAdapter(Task.class, new TaskHandler.TaskSerializer())
-                .create();
+        Gson gson = Serializers.taskToGson;
         String taskJson1 = gson.toJson(task1);
         HttpResponse<String> response;
         try (HttpClient client = HttpClient.newHttpClient()) {
@@ -221,11 +206,7 @@ public class HttpTaskManagerTasksTest {
                 TaskStatus.NEW, TaskTypes.TASK);
         task2.setDuration(Duration.ofMinutes(5));
         task2.setStartTime(LocalDateTime.of(2024, 7, 12, 14, 30));
-        Gson gson = new GsonBuilder()
-                .serializeNulls()
-                .setPrettyPrinting()
-                .registerTypeAdapter(Task.class, new TaskHandler.TaskSerializer())
-                .create();
+        Gson gson = Serializers.taskToGson;
         String taskJson1 = gson.toJson(task1);
         String taskJson2 = gson.toJson(task2);
         HttpResponse<String> response;

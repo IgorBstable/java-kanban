@@ -36,11 +36,7 @@ public class HttpTaskManagerEpicsTest {
         URI url = URI.create("http://localhost:8080/epics");
         Epic epic1 = new Epic(0, "Test 1", "Testing epic1");
         Epic epic2 = new Epic(0, "Test 2", "Testing epic2");
-        Gson gson = new GsonBuilder()
-                .serializeNulls()
-                .setPrettyPrinting()
-                .registerTypeAdapter(Epic.class, new EpicHandler.EpicSerializer())
-                .create();
+        Gson gson = Serializers.epicToGson;
         String json1 = gson.toJson(epic1);
         String json2 = gson.toJson(epic2);
         HttpResponse<String> response;
@@ -83,11 +79,7 @@ public class HttpTaskManagerEpicsTest {
     public void testGetEpicById() throws IOException, InterruptedException {
         URI url = URI.create("http://localhost:8080/epics");
         Epic epic1 = new Epic(0, "Test 1", "Testing epic1");
-        Gson gson = new GsonBuilder()
-                .serializeNulls()
-                .setPrettyPrinting()
-                .registerTypeAdapter(Epic.class, new EpicHandler.EpicSerializer())
-                .create();
+        Gson gson = Serializers.epicToGson;
         String Json1 = gson.toJson(epic1);
         HttpResponse<String> response;
         try (HttpClient client = HttpClient.newHttpClient()) {
@@ -125,11 +117,7 @@ public class HttpTaskManagerEpicsTest {
         Epic epic1 = new Epic(0, "Test 1", "Testing epic1");
         epic1.setType(TaskTypes.EPIC);
         epic1.setStatus(TaskStatus.NEW);
-        Gson gson = new GsonBuilder()
-                .serializeNulls()
-                .setPrettyPrinting()
-                .registerTypeAdapter(Epic.class, new EpicHandler.EpicSerializer())
-                .create();
+        Gson gson = Serializers.epicToGson;
         String taskJson1 = gson.toJson(epic1);
         HttpResponse<String> response;
         try (HttpClient client = HttpClient.newHttpClient()) {
@@ -157,11 +145,7 @@ public class HttpTaskManagerEpicsTest {
         Epic epic2 = new Epic(0, "Test 2", "Testing epic2");
         epic2.setType(TaskTypes.EPIC);
         epic2.setStatus(TaskStatus.NEW);
-        Gson gson = new GsonBuilder()
-                .serializeNulls()
-                .setPrettyPrinting()
-                .registerTypeAdapter(Epic.class, new EpicHandler.EpicSerializer())
-                .create();
+        Gson gson = Serializers.epicToGson;
         String Json1 = gson.toJson(epic1);
         String Json2 = gson.toJson(epic2);
         HttpResponse<String> response;
@@ -199,11 +183,7 @@ public class HttpTaskManagerEpicsTest {
     public void testGetEpicSubtasks() throws IOException, InterruptedException {
         URI url = URI.create("http://localhost:8080/epics");
         Epic epic1 = new Epic(0, "Test 1", "Testing epic1");
-        Gson gsonEpic = new GsonBuilder()
-                .serializeNulls()
-                .setPrettyPrinting()
-                .registerTypeAdapter(Epic.class, new EpicHandler.EpicSerializer())
-                .create();
+        Gson gsonEpic = Serializers.epicToGson;
         String JsonEpic = gsonEpic.toJson(epic1);
 
         int epicId;
@@ -221,11 +201,7 @@ public class HttpTaskManagerEpicsTest {
                     TaskStatus.NEW, epicId);
             subtask1.setDuration(Duration.ofMinutes(5));
             subtask1.setStartTime(LocalDateTime.of(2024, 7, 12, 10, 0));
-            Gson gsonSubtask = new GsonBuilder()
-                    .serializeNulls()
-                    .setPrettyPrinting()
-                    .registerTypeAdapter(Subtask.class, new SubtaskHandler.SubtaskSerializer())
-                    .create();
+            Gson gsonSubtask = Serializers.subtaskToGson;
             String JsonSubtask = gsonSubtask.toJson(subtask1);
             URI url0 = URI.create("http://localhost:8080/subtasks");
             HttpRequest request2 = HttpRequest.newBuilder()

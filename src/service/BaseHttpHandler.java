@@ -9,8 +9,8 @@ public class BaseHttpHandler {
     public BaseHttpHandler() {
     }
 
-    protected void sendTextAndData(HttpExchange h, String text) throws IOException {
-        byte[] resp = text.getBytes(StandardCharsets.UTF_8);
+    protected void sendTextAndData(HttpExchange h, String json) throws IOException {
+        byte[] resp = json.getBytes(StandardCharsets.UTF_8);
         h.getResponseHeaders().add("Content-Type", "application/json;charset=utf-8");
         h.sendResponseHeaders(200, resp.length);
         h.getResponseBody().write(resp);

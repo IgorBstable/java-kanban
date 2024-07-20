@@ -39,21 +39,9 @@ public class HttpTaskManagerHistoryTest {
         URI urlSubtasks = URI.create("http://localhost:8080/subtasks");
         URI urlEpics = URI.create("http://localhost:8080/epics");
 
-        Gson gsonTasks = new GsonBuilder()
-                .serializeNulls()
-                .setPrettyPrinting()
-                .registerTypeAdapter(Task.class, new TaskHandler.TaskSerializer())
-                .create();
-        Gson gsonSubtasks = new GsonBuilder()
-                .serializeNulls()
-                .setPrettyPrinting()
-                .registerTypeAdapter(Subtask.class, new SubtaskHandler.SubtaskSerializer())
-                .create();
-        Gson gsonEpics = new GsonBuilder()
-                .serializeNulls()
-                .setPrettyPrinting()
-                .registerTypeAdapter(Epic.class, new EpicHandler.EpicSerializer())
-                .create();
+        Gson gsonTasks = Serializers.taskToGson;
+        Gson gsonSubtasks = Serializers.subtaskToGson;
+        Gson gsonEpics = Serializers.epicToGson;
 
         HttpResponse<String> response;
         try (HttpClient client = HttpClient.newHttpClient()) {

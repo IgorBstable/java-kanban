@@ -4,12 +4,10 @@ import com.google.gson.*;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import model.*;
+
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.reflect.Type;
 import java.nio.charset.StandardCharsets;
-import java.time.Duration;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Optional;
 
@@ -54,12 +52,7 @@ class EpicHandler extends BaseHttpHandler implements HttpHandler {
     private void handleGetEpics(HttpExchange exchange) throws IOException {
         try {
             ArrayList<Task> epics = HttpTaskServer.manager.getAllEpics();
-            Gson gson = new GsonBuilder()
-                    .serializeNulls()
-                    .setPrettyPrinting()
-                    .registerTypeAdapter(Epic.class, new EpicSerializer())
-                    .create();
-
+            Gson gson = Serializers.epicToGson;
             String epicsArrayJson = gson.toJson(epics);
             HttpTaskServer.message.sendTextAndData(exchange, epicsArrayJson);
         } catch (Exception e) {
@@ -80,11 +73,7 @@ class EpicHandler extends BaseHttpHandler implements HttpHandler {
             if (epic == null) {
                 throw new NotFoundException("Эпик не найден!");
             }
-            Gson gson = new GsonBuilder()
-                    .serializeNulls()
-                    .setPrettyPrinting()
-                    .registerTypeAdapter(Epic.class, new EpicSerializer())
-                    .create();
+            Gson gson = Serializers.epicToGson;
 
             String epicJson = gson.toJson(epic);
             HttpTaskServer.message.sendTextAndData(exchange, epicJson);
@@ -95,7 +84,6 @@ class EpicHandler extends BaseHttpHandler implements HttpHandler {
                     "Произошла ошибка при обработке запроса");
         }
     }
-
 
     private void handleCreateEpic(HttpExchange exchange) throws IOException {
         try {
@@ -124,16 +112,11 @@ class EpicHandler extends BaseHttpHandler implements HttpHandler {
                 return;
             }
             int id = optId.get();
-            ArrayList<Task> epics = HttpTaskServer.manager.getAllEpics();
-            boolean deleted = false;
-            for (Task t : epics) {
-                if (t.getId() == id) {
-                    HttpTaskServer.manager.delEpicById(id);
-                    HttpTaskServer.message.sendText(exchange, "Эпик успешно удален.");
-                    deleted = true;
-                }
-            }
-            if (!deleted) {
+            Task epic = HttpTaskServer.manager.getEpicById(id);
+            if (epic != null) {
+                HttpTaskServer.manager.delEpicById(id);
+                HttpTaskServer.message.sendText(exchange, "Эпик успешно удален.");
+            } else {
                 HttpTaskServer.message.sendNotFound(exchange, "Эпик не удален, " +
                         "т.к. не найдено эпика с указанным id.");
             }
@@ -153,25 +136,15 @@ class EpicHandler extends BaseHttpHandler implements HttpHandler {
                 return;
             }
             int id = optId.get();
-            ArrayList<Task> epics = HttpTaskServer.manager.getAllEpics();
-            boolean ifExists = false;
-            for (Task t : epics) {
-                if (t.getId() == id) {
-                    ArrayList<Task> listOfSubtasksOfEpic =
-                            HttpTaskServer.manager.getListOfSubTasksOfEpic(id);
-                    Gson gson = new GsonBuilder()
-                            .serializeNulls()
-                            .setPrettyPrinting()
-                            .registerTypeAdapter(Subtask.class, new SubtaskHandler.SubtaskSerializer())
-                            .create();
-
-                    String subtasksOfEpicArrayJson = gson.toJson(listOfSubtasksOfEpic);
-                    HttpTaskServer.message.sendTextAndData(exchange, subtasksOfEpicArrayJson);
-                    ifExists = true;
-                }
-            }
-            if (!ifExists) {
-                HttpTaskServer.message.sendNotFound(exchange, "Эпик не удален, " +
+            Task epic = HttpTaskServer.manager.getEpicById(id);
+            if (epic != null) {
+                ArrayList<Task> listOfSubtasksOfEpic =
+                        HttpTaskServer.manager.getListOfSubTasksOfEpic(id);
+                Gson gson = Serializers.subtaskToGson;
+                String subtasksOfEpicArrayJson = gson.toJson(listOfSubtasksOfEpic);
+                HttpTaskServer.message.sendTextAndData(exchange, subtasksOfEpicArrayJson);
+            } else {
+                HttpTaskServer.message.sendNotFound(exchange, "Подзадачи не получены, " +
                         "т.к. не найдено эпика с указанным id.");
             }
         } catch (Exception e) {
@@ -195,10 +168,7 @@ class EpicHandler extends BaseHttpHandler implements HttpHandler {
             String input = new String(inputStream.readAllBytes(), StandardCharsets.UTF_8);
             JsonElement jsonElement = JsonParser.parseString(input);
             JsonObject jsonObject = jsonElement.getAsJsonObject();
-            Gson gson = new GsonBuilder()
-                    .setPrettyPrinting()
-                    .registerTypeAdapter(Epic.class, new EpicDeserializer())
-                    .create();
+            Gson gson = Serializers.epicFromGson;
             return gson.fromJson(jsonObject, Epic.class);
         } catch (Exception e) {
             HttpTaskServer.message.sendNotFound(exchange, "Произошла ошибка!");
@@ -231,7 +201,6 @@ class EpicHandler extends BaseHttpHandler implements HttpHandler {
         return Endpoint.UNKNOWN;
     }
 
-
     enum Endpoint {
         GET_EPICS,
         GET_EPIC_BY_ID,
@@ -239,89 +208,5 @@ class EpicHandler extends BaseHttpHandler implements HttpHandler {
         DELETE_EPIC,
         GET_EPIC_SUBTASKS,
         UNKNOWN
-    }
-
-    static class EpicSerializer implements JsonSerializer<Epic> {
-        @Override
-        public JsonElement serialize(Epic epic, Type type,
-                                     JsonSerializationContext context) {
-            JsonObject result = new JsonObject();
-            result.addProperty("id", epic.getId());
-            result.addProperty("type", epic.getType().toString());
-            result.addProperty("name", epic.getName());
-            if (epic.getStatus() == null) {
-                result.addProperty("status", "");
-            } else {
-                result.addProperty("status", epic.getStatus().toString());
-            }
-            result.addProperty("description", epic.getDescription());
-            if (epic.getStartTime() == null) {
-                result.addProperty("startTime", "");
-            } else {
-                result.addProperty("startTime", epic.getStartTime().toString());
-            }
-            if (epic.getDuration() == null) {
-                result.addProperty("duration", "");
-            } else {
-                result.addProperty("duration", epic.getDuration().toString());
-            }
-            if (epic.getEndTime() == null) {
-                result.addProperty("endTime", "");
-            } else {
-                result.addProperty("endTime", epic.getEndTime().toString());
-            }
-            return result;
-        }
-    }
-
-    static class EpicDeserializer implements JsonDeserializer<Epic> {
-        @Override
-        public Epic deserialize(JsonElement jsonElement, Type type,
-                                JsonDeserializationContext context) throws JsonParseException {
-            JsonObject o = jsonElement.getAsJsonObject();
-            Epic epic = new Epic(
-                    o.get("id").getAsInt(),
-                    o.get("name").getAsString(),
-                    o.get("description").getAsString()
-            );
-
-            if (!o.has("type")) {
-                epic.setType(null);
-            } else {
-                TaskTypes epicType = TaskTypes.valueOf(o.get("type").getAsString());
-                epic.setType(epicType);
-            }
-
-            if (!o.has("status")) {
-                epic.setStatus(null);
-            } else {
-                TaskStatus epicStatus = TaskStatus.valueOf(o.get("status").getAsString());
-                epic.setStatus(epicStatus);
-            }
-
-            if (!o.has("startTime") || o.get("startTime").getAsString().isEmpty()) {
-                epic.setStartTime(null);
-            } else {
-                String startTime = o.get("startTime").getAsString();
-                LocalDateTime localDateTime = LocalDateTime.parse(startTime);
-                epic.setStartTime(localDateTime);
-            }
-
-            if (!o.has("duration")  || o.get("duration").getAsString().isEmpty()) {
-                epic.setDuration(null);
-            } else {
-                String duration = o.get("duration").getAsString();
-                Duration d = Duration.parse(duration);
-                epic.setDuration(d);
-            }
-            if (!o.has("endTime")  || o.get("endTime").getAsString().isEmpty()) {
-                epic.setEndTime(null);
-            } else {
-                String endTime = o.get("endTime").getAsString();
-                LocalDateTime localDateTime = LocalDateTime.parse(endTime);
-                epic.setEndTime(localDateTime);
-            }
-            return epic;
-        }
     }
 }

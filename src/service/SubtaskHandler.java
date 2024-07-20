@@ -3,15 +3,13 @@ package service;
 import com.google.gson.*;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
+import model.Serializers;
 import model.Subtask;
 import model.Task;
-import model.TaskStatus;
+
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.reflect.Type;
 import java.nio.charset.StandardCharsets;
-import java.time.Duration;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Optional;
 
@@ -56,11 +54,7 @@ class SubtaskHandler extends BaseHttpHandler implements HttpHandler {
     private void handleGetSubtasks(HttpExchange exchange) throws IOException {
         try {
             ArrayList<Task> subtasks = HttpTaskServer.manager.getAllSubtasks();
-            Gson gson = new GsonBuilder()
-                    .serializeNulls()
-                    .setPrettyPrinting()
-                    .registerTypeAdapter(Subtask.class, new SubtaskSerializer())
-                    .create();
+            Gson gson = Serializers.subtaskToGson;
 
             String tasksArrayJson = gson.toJson(subtasks);
             HttpTaskServer.message.sendTextAndData(exchange, tasksArrayJson);
@@ -82,11 +76,7 @@ class SubtaskHandler extends BaseHttpHandler implements HttpHandler {
             if (subtask == null) {
                 throw new NotFoundException("Подзадача не найдена!");
             }
-            Gson gson = new GsonBuilder()
-                    .serializeNulls()
-                    .setPrettyPrinting()
-                    .registerTypeAdapter(Subtask.class, new SubtaskSerializer())
-                    .create();
+            Gson gson = Serializers.subtaskToGson;
 
             String taskJson = gson.toJson(subtask);
             HttpTaskServer.message.sendTextAndData(exchange, taskJson);
@@ -97,7 +87,6 @@ class SubtaskHandler extends BaseHttpHandler implements HttpHandler {
                     "Произошла ошибка при обработке запроса");
         }
     }
-
 
     private void handleCreateSubtask(HttpExchange exchange) throws IOException {
         try {
@@ -134,16 +123,11 @@ class SubtaskHandler extends BaseHttpHandler implements HttpHandler {
             }
 
             int id = optId.get();
-            ArrayList<Task> subtasks = HttpTaskServer.manager.getAllSubtasks();
-            boolean updated = false;
-            for (Task t : subtasks) {
-                if (t.getId() == id) {
-                    HttpTaskServer.manager.updateSubTask(subtask);
-                    HttpTaskServer.message.sendText(exchange, "Подзадача успешно обновлена.");
-                    updated = true;
-                }
-            }
-            if (!updated) {
+            Task subtask1 = HttpTaskServer.manager.getSubtaskById(id);
+            if (subtask1 != null) {
+                HttpTaskServer.manager.updateSubTask(subtask);
+                HttpTaskServer.message.sendText(exchange, "Подзадача успешно обновлена.");
+            } else {
                 HttpTaskServer.message.sendNotFound(exchange, "Подзадача не обновлена, " +
                         "т.к. не найдено задачи с указанным id.");
             }
@@ -197,10 +181,7 @@ class SubtaskHandler extends BaseHttpHandler implements HttpHandler {
             String input = new String(inputStream.readAllBytes(), StandardCharsets.UTF_8);
             JsonElement jsonElement = JsonParser.parseString(input);
             JsonObject jsonObject = jsonElement.getAsJsonObject();
-            Gson gson = new GsonBuilder()
-                    .setPrettyPrinting()
-                    .registerTypeAdapter(Subtask.class, new SubtaskDeserializer())
-                    .create();
+            Gson gson = Serializers.subtaskFromGson;
             return gson.fromJson(jsonObject, Subtask.class);
         } catch (Exception e) {
             HttpTaskServer.message.sendNotFound(exchange, "Произошла ошибка!");
@@ -233,7 +214,6 @@ class SubtaskHandler extends BaseHttpHandler implements HttpHandler {
         return Endpoint.UNKNOWN;
     }
 
-
     enum Endpoint {
         GET_SUBTASKS,
         GET_SUBTASK_BY_ID,
@@ -241,46 +221,5 @@ class SubtaskHandler extends BaseHttpHandler implements HttpHandler {
         UPDATE_SUBTASK,
         DELETE_SUBTASK,
         UNKNOWN
-    }
-
-    static class SubtaskSerializer implements JsonSerializer<Subtask> {
-        @Override
-        public JsonElement serialize(Subtask subtask, Type type,
-                                     JsonSerializationContext context) {
-            JsonObject result = new JsonObject();
-            result.addProperty("id", subtask.getId());
-            result.addProperty("type", subtask.getType().toString());
-            result.addProperty("name", subtask.getName());
-            result.addProperty("status", subtask.getStatus().toString());
-            result.addProperty("description", subtask.getDescription());
-            result.addProperty("startTime", subtask.getStartTime().toString());
-            result.addProperty("duration", subtask.getDuration().toString());
-            result.addProperty("endTime", subtask.getEndTime().toString());
-            result.addProperty("epicId", subtask.getEpicId().toString());
-            return result;
-        }
-    }
-
-    static class SubtaskDeserializer implements JsonDeserializer<Subtask> {
-        @Override
-        public Subtask deserialize(JsonElement jsonElement, Type type,
-                                   JsonDeserializationContext context) throws JsonParseException {
-            JsonObject o = jsonElement.getAsJsonObject();
-            Subtask subtask = new Subtask(
-                    o.get("id").getAsInt(),
-                    o.get("name").getAsString(),
-                    o.get("description").getAsString(),
-                    TaskStatus.valueOf(o.get("status").getAsString()),
-                    o.get("epicId").getAsInt()
-            );
-            String startTime = o.get("startTime").getAsString();
-            LocalDateTime localDateTime = LocalDateTime.parse(startTime);
-            subtask.setStartTime(localDateTime);
-            String duration = o.get("duration").getAsString();
-            Duration d = Duration.parse(duration);
-            subtask.setDuration(d);
-
-            return subtask;
-        }
     }
 }
