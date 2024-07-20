@@ -1,7 +1,6 @@
 package service;
 
 import model.*;
-
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -166,6 +165,15 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
                 this.epics.put(task.getId(), task);
             }
             this.taskId = maxId;
+        }
+
+        for (Task subtask : subTasks.values()) {
+            int subtaskId = subtask.getId();
+            Subtask subtask1 = (Subtask) subtask;
+            int epicId = subtask1.getEpicId();
+            Task epic = epics.get(epicId);
+            Epic epic1 = (Epic) epic;
+            epic1.getSubtasksIdInEpic().add(subtaskId);
         }
 
         ArrayList<Task> allTasks = this.getAllTasks();

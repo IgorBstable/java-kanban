@@ -1,7 +1,6 @@
 package service;
 
 import model.*;
-
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -341,7 +340,11 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public List<Task> getHistoryManager() {
+    public List<Task> getHistory() {
         return historyManager.getHistory();
+    }
+
+    public void deletePrioritized() {
+        prioritizedTasks.clear();
     }
 }

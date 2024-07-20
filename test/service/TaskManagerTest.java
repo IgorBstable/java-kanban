@@ -5,7 +5,6 @@ import model.*;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
-
 import static model.TaskStatus.IN_PROGRESS;
 import static model.TaskStatus.NEW;
 import static org.junit.jupiter.api.Assertions.*;

@@ -3,13 +3,9 @@ package service;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
-
 import org.junit.jupiter.api.Test;
-
 import static org.junit.jupiter.api.Assertions.*;
-
 import model.*;
-
 import static model.TaskStatus.NEW;
 
 class InMemoryHistoryManagerTest {
@@ -59,7 +55,7 @@ class InMemoryHistoryManagerTest {
         taskManager.makeNewTask(task);
         taskManager.getTaskById(1);
         taskManager.getTaskById(1);
-        assertEquals(List.of(task), taskManager.getHistoryManager());
+        assertEquals(List.of(task), taskManager.getHistory());
     }
 
     // Пустая история задач
@@ -81,7 +77,7 @@ class InMemoryHistoryManagerTest {
         taskManager.makeNewTask(task1);
         taskManager.getTaskById(1);
         taskManager.getTaskById(1);
-        assertEquals(List.of(task1), taskManager.getHistoryManager());
+        assertEquals(List.of(task1), taskManager.getHistory());
     }
 
     // Проверяем операцию удаления (начало)
@@ -101,7 +97,7 @@ class InMemoryHistoryManagerTest {
         taskManager.getTaskById(1);
         taskManager.getTaskById(2);
         taskManager.deleteTaskById(1);
-        assertEquals(List.of(task2), taskManager.getHistoryManager());
+        assertEquals(List.of(task2), taskManager.getHistory());
     }
 
     // Проверяем операцию удаления (конец)
@@ -121,7 +117,7 @@ class InMemoryHistoryManagerTest {
         taskManager.getTaskById(1);
         taskManager.getTaskById(2);
         taskManager.deleteTaskById(2);
-        assertEquals(List.of(task1), taskManager.getHistoryManager());
+        assertEquals(List.of(task1), taskManager.getHistory());
     }
 
     // Проверяем операцию удаления (середина)
@@ -147,7 +143,7 @@ class InMemoryHistoryManagerTest {
         taskManager.getTaskById(2);
         taskManager.getTaskById(3);
         taskManager.deleteTaskById(2);
-        assertEquals(List.of(task1, task3), taskManager.getHistoryManager());
+        assertEquals(List.of(task1, task3), taskManager.getHistory());
     }
 
 
